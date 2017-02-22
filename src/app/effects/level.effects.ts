@@ -37,7 +37,7 @@ export class LevelEffects {
   @Effect()
   create$: Observable<Action> = this.actions$
     .ofType(level.ActionTypes.CREATE_LEVEL)    
-    .mergeMap(() =>
+    .switchMap(() =>
       this.db.insert('levels', [ {id:'NEW', name:'New Level', spawns:[]} ])
         .map(() => new level.SelectLevelAction('NEW'))
         .catch(() => of(new level.SelectLevelAction('1')))

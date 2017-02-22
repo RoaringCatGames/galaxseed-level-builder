@@ -12,20 +12,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { MaterialModule } from '@angular/material';
 
 import { ComponentsModule } from './components';
-import { BookEffects } from './effects/book';
-import { CollectionEffects } from './effects/collection';
 import { LevelEffects } from './effects/level.effects';
-import { BookExistsGuard } from './guards/book-exists';
 
 import { AppComponent } from './containers/app';
 import { LevelBuilderPageComponent } from './containers/level-builder-page';
-import { FindBookPageComponent } from './containers/find-book-page';
-import { ViewBookPageComponent } from './containers/view-book-page';
-import { SelectedBookPageComponent } from './containers/selected-book-page';
-import { CollectionPageComponent } from './containers/collection-page';
 import { NotFoundPageComponent } from './containers/not-found-page';
-
-import { GoogleBooksService } from './services/google-books';
 
 import { routes } from './routes';
 import { reducer } from './reducers';
@@ -75,9 +66,7 @@ import { schema } from './db';
      * immediately when the application starts.
      *
      * See: https://github.com/ngrx/effects/blob/master/docs/api.md#run
-     */
-    EffectsModule.run(BookEffects),
-    EffectsModule.run(CollectionEffects),
+     */    
     EffectsModule.run(LevelEffects),
 
     /**
@@ -88,16 +77,10 @@ import { schema } from './db';
   ],
   declarations: [
     AppComponent,
-    LevelBuilderPageComponent,      
-    FindBookPageComponent,
-    SelectedBookPageComponent,
-    ViewBookPageComponent,
-    CollectionPageComponent,
+    LevelBuilderPageComponent,          
     NotFoundPageComponent
   ],
-  providers: [
-    BookExistsGuard,
-    GoogleBooksService
+  providers: [    
   ],
   bootstrap: [
     AppComponent

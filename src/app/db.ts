@@ -15,6 +15,10 @@ export const schema: DBSchema = {
     levels: {
       autoIncrement: true,
       primaryKey: 'id'
+    },
+    spawns: {
+      autoIncrement: true,
+      primaryKey: 'id'
     }
   }
 };
