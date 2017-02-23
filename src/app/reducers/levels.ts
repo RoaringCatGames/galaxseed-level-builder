@@ -10,19 +10,26 @@ export interface State {
 }
 
 export const initialState: State = {
-  ids: ["1"],
-  storedLevels: {
-    1:{
-      id: "1",
-      name: "Level 1",
-      spawns: []
-    }
-  },
-  currentLevelId: "1"
+  ids: [],
+  storedLevels: {},
+  currentLevelId: undefined
 };
 
 export function reducer(state = initialState, action: level.Actions ): State {
   switch(action.type){
+
+    case level.ActionTypes.CREATE:
+      let newLevel: Level = { length: 20, name:'New Level', spawns:[]};
+      let now = new Date();
+      newLevel.id = `${now.getFullYear()}${now.getMonth()}${now.getDate()}${now.getHours()}${now.getMinutes()}${now.getMilliseconds()}`;    
+      
+      return {
+        ids: [...state.ids, newLevel.id],
+        storedLevels: Object.assign({}, state.storedLevels, {
+          [newLevel.id]:newLevel
+        }),
+        currentLevelId: newLevel.id
+      };      
 
     case level.ActionTypes.SELECT_LEVEL:
 
@@ -30,18 +37,7 @@ export function reducer(state = initialState, action: level.Actions ): State {
         ids:[...state.ids],
         storedLevels: Object.assign({}, state.storedLevels),
         currentLevelId: action.payload
-      };
-
-    case level.ActionTypes.CREATE_LEVEL:
-      if(state.currentLevelId === 'NEW'){
-        return state;
-      }else{
-        return {
-          ids:[...state.ids, 'NEW'],
-          storedLevels: Object.assign({}, state.storedLevels, {NEW:{id:'NEW', name:'New Level', spawns:[]}}),
-          currentLevelId: 'NEW'
-        };
-      }
+      };    
 
     case level.ActionTypes.ADD_SPAWN:
 
