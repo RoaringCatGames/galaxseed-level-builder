@@ -5,13 +5,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { LevelBuilderFormComponent } from './level-builder-form';
-import { LevelDetailComponent } from './level-detail';
+import { LevelRowComponent } from './level-row.component';
+import { LevelDetailComponent } from './level-detail.component';
 import { SpawnDetailComponent } from './spawn-detail';
 
 import { PipesModule } from '../pipes';
 
 
 export const COMPONENTS = [
+  LevelRowComponent,
   LevelBuilderFormComponent,
   LevelDetailComponent,
   SpawnDetailComponent,

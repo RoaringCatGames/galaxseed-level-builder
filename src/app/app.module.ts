@@ -15,7 +15,10 @@ import { ComponentsModule } from './components';
 import { LevelEffects } from './effects/level.effects';
 
 import { AppComponent } from './containers/app';
+import { LevelListPageComponent } from './containers/level-list-page';
 import { LevelBuilderPageComponent } from './containers/level-builder-page';
+import { LevelJsonPageComponent } from './containers/level-json-page';
+import { LevelDetailPageComponent } from './containers/level-detail-page';
 import { NotFoundPageComponent } from './containers/not-found-page';
 
 import { routes } from './routes';
@@ -77,7 +80,10 @@ import { schema } from './db';
   ],
   declarations: [
     AppComponent,
-    LevelBuilderPageComponent,          
+    LevelListPageComponent,
+    LevelBuilderPageComponent, 
+    LevelJsonPageComponent,
+    LevelDetailPageComponent,         
     NotFoundPageComponent
   ],
   providers: [    
