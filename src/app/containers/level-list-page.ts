@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import * as fromRoot from '../reducers';
+import { CreateLevelAction } from '../actions/level';
 import { Level } from '../models/level';
 
 
@@ -13,7 +14,7 @@ import { Level } from '../models/level';
     <md-card>
       <md-card-title>Levels</md-card-title> 
       <md-card-actions>
-        <button md-raised-button routerLink="/builder">Build Level</button>
+        <button md-raised-button routerLink="/builder" (click)="createNewLevel()">Build Level</button>
       </md-card-actions>     
     </md-card>    
 
@@ -25,5 +26,8 @@ export class LevelListPageComponent {
 
   constructor(private store: Store<fromRoot.State>) {
     this.level$ = store.select(fromRoot.getLevels);
+  }
+  createNewLevel(){
+    this.store.dispatch(new CreateLevelAction());
   }
 }

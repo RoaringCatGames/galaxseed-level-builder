@@ -52,7 +52,8 @@ export class UpdateLevelAction implements Action {
 }
 
 export class SaveLevelAction implements Action {
-  type = ActionTypes.SAVE_LEVEL;    
+  type = ActionTypes.SAVE_LEVEL;
+  constructor(public payload: Level) {}    
 }
 
 

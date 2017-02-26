@@ -4,20 +4,18 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import * as fromRoot from '../reducers';
-import { AddSpawnAction, CreateLevelAction } from '../actions/level';
+import { AddSpawnAction, CreateLevelAction, SaveLevelAction } from '../actions/level';
 import { Level, Spawn } from '../models/level';
 
 
 @Component({
   selector: 'glb-level-builder-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <md-card>
-      <md-card-title>Create Level</md-card-title>
-      <button (click)="createNew()">Create New Level</button>
-    </md-card>
-
-    <glb-level-builder-form [level]="level$ | async" (spawnAdded)="addSpawn($event)"></glb-level-builder-form>    
+  template: `  
+    <glb-level-builder-form 
+      [level]="level$ | async" 
+      (spawnAdded)="addSpawn($event)"
+      (levelSaved)="levelSaved($event)"></glb-level-builder-form>    
     <glb-level-detail [level]="level$ | async"></glb-level-detail>
   `
 })
@@ -30,11 +28,12 @@ export class LevelBuilderPageComponent {
     this.level$ = store.select(fromRoot.getCurrentLevel);
   }
 
-  createNew(){
-    this.store.dispatch(new CreateLevelAction());
-  }
-
   addSpawn(spawn: Spawn){
     this.store.dispatch(new AddSpawnAction(spawn));
+  }
+
+  levelSaved(level: Level){
+    console.log("Emitted Level: ", level);
+    this.store.dispatch(new SaveLevelAction(level))
   }
 }

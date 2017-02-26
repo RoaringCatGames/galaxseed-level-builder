@@ -1,6 +1,7 @@
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/takeUntil';
@@ -54,28 +55,24 @@ export class LevelEffects {
         .map((levels: Array<Level>) => new level.LoadLevelsSuccessAction(levels))
         .catch((error) => of(new level.LoadLevelsFailedAction(error))));
 
-  // @Effect()
-  // create$: Observable<Action> = this.actions$    
-  //   .ofType(level.ActionTypes.CREATE)  
-  //   .do(() => console.log("LEVEL CREATE EFFECT CALLED"))  
-  //   .switchMap((action) => {        
-  //       let newLevel: Level = { length: 20, name:'New Level', spawns:[]};
-  //       let now = new Date();
-  //       newLevel.id = `${now.getFullYear()}${now.getMonth()}${now.getDate()}${now.getHours()}${now.getMinutes()}${now.getMilliseconds()}`;
-  //       return this.db.insert('levels', [ newLevel ])
-  //         .map((value) => {            
-  //           return new level.CreateLevelSuccessAction(value)
-  //         })
-  //         .catch(() => of(new level.SelectLevelAction('1')))
-  //     }
-  //   );
 
-  // @Effect()
-  // save$: Observable<Action> = this.actions$
-  //   .ofType(level.ActionTypes.SAVE_LEVEL)    
-  //   .mergeMap(level =>
-  //     this.db.insert('levels', [ level ])
-  //       .map(() => new level.SaveLevelSuccessAction(level))
-  //       .catch(() => of(new level.SaveLevelFailAction(level))))
-  //   );
+  @Effect()
+  updates$: Observable<Action> = this.actions$
+    .ofType(level.ActionTypes.UPDATE_LEVEL)  
+    .do(() => console.log("Update Action Effect Fired"))  
+    .mergeMap(updatedLevel =>
+      this.db.insert('levels', [ updatedLevel ])
+        .map((lvl) => new level.SelectLevelAction(lvl.id))
+        // .catch(() => of(new level.SaveLevelFailAction(level))))
+    );
+
+  @Effect()
+  save$: Observable<Action> = this.actions$
+    .ofType(level.ActionTypes.SAVE_LEVEL)  
+    .do(() => console.log("Save Action Effect Fired"))  
+    .mergeMap(updatedLevel =>
+      this.db.insert('levels', [ updatedLevel.payload ])
+        .map((data) => new level.SelectLevelAction(data.id))
+        // .catch(() => of(new level.SaveLevelFailAction(level))))
+    );
 }

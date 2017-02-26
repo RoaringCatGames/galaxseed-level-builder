@@ -39,8 +39,32 @@ export function reducer(state = initialState, action: level.Actions ): State {
         currentLevelId: action.payload
       };    
 
-    case level.ActionTypes.ADD_SPAWN:
+    case level.ActionTypes.SAVE_LEVEL:
+      console.log("SAVE LEVEL REDUCER ACTION");
+     let newLevelToSave: Level = action.payload;
 
+      return {
+        ids: [...state.ids],
+        storedLevels: Object.assign({}, state.storedLevels, {
+          [newLevelToSave.id]: newLevelToSave
+        }),
+        currentLevelId: state.currentLevelId
+      };
+
+    case level.ActionTypes.UPDATE_LEVEL:
+      console.log("UPDATE LEVEL REDUCER ACTION");
+      let updatedLevel: Level = action.payload;
+
+      return {
+        ids: [...state.ids],
+        storedLevels: Object.assign({}, state.storedLevels, {
+          [updatedLevel.id]: updatedLevel
+        }),
+        currentLevelId: state.currentLevelId
+      };
+      
+    case level.ActionTypes.ADD_SPAWN:
+      
       let newSpawn: Spawn = action.payload,
           newSpawns: Array<Spawn> ,
           currentLevel: Level = state.storedLevels[state.currentLevelId];

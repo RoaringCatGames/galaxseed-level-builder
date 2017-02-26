@@ -4,7 +4,7 @@ import { MaterialModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { LevelBuilderFormComponent } from './level-builder-form';
+import { LevelBuilderFormComponent } from './level-builder-form.component';
 import { LevelRowComponent } from './level-row.component';
 import { LevelDetailComponent } from './level-detail.component';
 import { SpawnDetailComponent } from './spawn-detail';
