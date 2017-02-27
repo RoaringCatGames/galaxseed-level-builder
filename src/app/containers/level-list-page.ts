@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import * as fromRoot from '../reducers';
-import { CreateLevelAction } from '../actions/level';
+import { CreateLevelAction, SelectLevelAction } from '../actions/level';
 import { Level } from '../models/level';
 
 
@@ -11,23 +11,29 @@ import { Level } from '../models/level';
   selector: 'glb-level-list-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <md-card>
-      <md-card-title>Levels</md-card-title> 
-      <md-card-actions>
-        <button md-raised-button routerLink="/builder" (click)="createNewLevel()">Build Level</button>
-      </md-card-actions>     
-    </md-card>    
+    <md-toolbar>
+      <span class="toolbar-title">Levels ({{(levels$ | async)?.length}})</span>
+      <span class="toolbar-center-spacer"></span>
 
-    <glb-level-row *ngFor="let level of (levels$ | async)" [level]="level"></glb-level-row>    
+      <span class="toolbar-actions">
+        <button md-raised-button routerLink="/builder" (click)="createNewLevel()">Build Level</button>      
+      </span>
+    </md-toolbar>    
+    
+    <glb-level-row *ngFor="let level of (levels$ | async)" [level]="level" (editRequested)="selectLevel($event)"></glb-level-row>    
   `
 })
 export class LevelListPageComponent {    
-  public level$: Observable<Array<Level>>;  
+  public levels$: Observable<Array<Level>>;  
 
   constructor(private store: Store<fromRoot.State>) {
-    this.level$ = store.select(fromRoot.getLevels);
+    this.levels$ = store.select(fromRoot.getLevels);
   }
   createNewLevel(){
     this.store.dispatch(new CreateLevelAction());
+  }
+
+  selectLevel(levelId: string){
+    this.store.dispatch(new SelectLevelAction(levelId));
   }
 }

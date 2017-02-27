@@ -4,10 +4,7 @@ import { Level } from '../models/level';
 
 @Component({
   selector: 'glb-level-detail',
-  template: `    
-    <a *ngIf="!isJson && level" [routerLink]="['/json', (level?.id)]">View JSON</a>
-    <span>Length (seconds): {{level?.time}}</span>    
-    
+  template: `        
     <div *ngIf="!isJson">
       <glb-spawn-detail *ngFor="let spawn of level?.spawns | sort:'time'" [spawn]="spawn"></glb-spawn-detail>
     </div>

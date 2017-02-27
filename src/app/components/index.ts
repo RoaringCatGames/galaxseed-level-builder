@@ -8,6 +8,7 @@ import { LevelBuilderFormComponent } from './level-builder-form.component';
 import { LevelRowComponent } from './level-row.component';
 import { LevelDetailComponent } from './level-detail.component';
 import { SpawnDetailComponent } from './spawn-detail';
+import { SpawnFormDialogComponent } from './spawn-form.component';
 
 import { PipesModule } from '../pipes';
 
@@ -17,6 +18,7 @@ export const COMPONENTS = [
   LevelBuilderFormComponent,
   LevelDetailComponent,
   SpawnDetailComponent,
+  SpawnFormDialogComponent
 ];
 
 
@@ -30,6 +32,9 @@ export const COMPONENTS = [
     PipesModule,
   ],
   declarations: COMPONENTS,
-  exports: COMPONENTS
+  exports: COMPONENTS,
+  entryComponents:[
+    SpawnFormDialogComponent
+  ]
 })
 export class ComponentsModule { }

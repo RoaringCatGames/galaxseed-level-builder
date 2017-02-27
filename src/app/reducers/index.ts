@@ -37,7 +37,7 @@ import { combineReducers } from '@ngrx/store';
  * the state of the reducer plus any selector functions. The `* as`
  * notation packages up all of the exports into a single object.
  */
-import * as fromLevels from './levels';
+import * as fromLevels from './levels.reducer';
 
 
 /**

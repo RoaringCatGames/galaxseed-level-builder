@@ -7,6 +7,8 @@ import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/ignoreElements';
+
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
@@ -46,13 +48,14 @@ export class LevelEffects {
   });
 
   @Effect()
-  loadLevels$: Observable<Action> = this.actions$
+  loadLevels$: Observable<Action> = this.actions$    
     .ofType(level.ActionTypes.LOAD_LEVELS)
+    .do(() => console.log("Load Levels Effect Firing"))
     .startWith(new level.LoadLevelsAction())
     .switchMap(() =>
       this.db.query('levels')
         .toArray()
-        .map((levels: Array<Level>) => new level.LoadLevelsSuccessAction(levels))
+        .map((levels: Array<Level>) => new level.LoadLevelsSuccessAction(levels))        
         .catch((error) => of(new level.LoadLevelsFailedAction(error))));
 
 
@@ -61,10 +64,11 @@ export class LevelEffects {
     .ofType(level.ActionTypes.UPDATE_LEVEL)  
     .do(() => console.log("Update Action Effect Fired"))  
     .mergeMap(updatedLevel =>
-      this.db.insert('levels', [ updatedLevel ])
-        .map((lvl) => new level.SelectLevelAction(lvl.id))
+      this.db.insert('levels', [ updatedLevel.payload ])        
+        //.map((lvl) => new level.SelectLevelAction(lvl.id))
         // .catch(() => of(new level.SaveLevelFailAction(level))))
-    );
+    )
+    .ignoreElements();
 
   @Effect()
   save$: Observable<Action> = this.actions$
@@ -72,7 +76,8 @@ export class LevelEffects {
     .do(() => console.log("Save Action Effect Fired"))  
     .mergeMap(updatedLevel =>
       this.db.insert('levels', [ updatedLevel.payload ])
-        .map((data) => new level.SelectLevelAction(data.id))
+        //.map((data) => new level.SelectLevelAction(data.id))
         // .catch(() => of(new level.SaveLevelFailAction(level))))
-    );
+    )
+    .ignoreElements();
 }

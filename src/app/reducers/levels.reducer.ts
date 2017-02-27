@@ -18,6 +18,17 @@ export const initialState: State = {
 export function reducer(state = initialState, action: level.Actions ): State {
   switch(action.type){
 
+    case level.ActionTypes.LOAD_SUCCESS:      
+      let loadedLevels: Array<Level> = action.payload;
+
+      let levelsMap = loadedLevels.reduce((acc, curr) => Object.assign({}, acc, {[curr.id]:curr}), {});      
+      return {
+        ids: [...loadedLevels.map((l: Level) => l.id)],
+        storedLevels: levelsMap,
+        currentLevelId: undefined
+      };
+
+
     case level.ActionTypes.CREATE:
       let newLevel: Level = { length: 20, name:'New Level', spawns:[]};
       let now = new Date();
@@ -39,8 +50,7 @@ export function reducer(state = initialState, action: level.Actions ): State {
         currentLevelId: action.payload
       };    
 
-    case level.ActionTypes.SAVE_LEVEL:
-      console.log("SAVE LEVEL REDUCER ACTION");
+    case level.ActionTypes.SAVE_LEVEL:      
      let newLevelToSave: Level = action.payload;
 
       return {
@@ -51,8 +61,7 @@ export function reducer(state = initialState, action: level.Actions ): State {
         currentLevelId: state.currentLevelId
       };
 
-    case level.ActionTypes.UPDATE_LEVEL:
-      console.log("UPDATE LEVEL REDUCER ACTION");
+    case level.ActionTypes.UPDATE_LEVEL:      
       let updatedLevel: Level = action.payload;
 
       return {
@@ -101,6 +110,6 @@ export const getCurrent = createSelector(getLevels, getCurrentId, (levels, curre
   return levels[currentId];
 });
 
-export const getAll = createSelector(getLevels, getIds, (levels, ids) => {
+export const getAll = createSelector(getLevels, getIds, (levels, ids) => {  
   return ids.map((id) => levels[id]);
 });

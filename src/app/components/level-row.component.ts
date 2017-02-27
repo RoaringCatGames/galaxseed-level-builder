@@ -8,12 +8,15 @@ import { Level } from '../models/level';
   template: `    
     <md-card>
       <md-card-title>{{level.name}}</md-card-title>
+      <md-card-content>
       Time: {{level.length}}
       ID: {{level.id}}
-
-      <button (click)="onView(level.id)">View JSON</button>
-      <button (click)="onEdit(level.id)">Edit Level</button>
-    <md-card>
+      </md-card-content>
+      <md-card-actions layout="row" layout-align="end center">
+        <button md-raised-button [routerLink]="['/json', level.id]">View JSON</button>
+        <button md-raised-button routerLink="builder" (click)="onEdit(level.id)">Edit Level</button>
+      </md-card-actions>
+    </md-card>
   `,
   styles:[
     `.flex-container{
@@ -28,13 +31,8 @@ import { Level } from '../models/level';
   ]
 })
 export class LevelRowComponent {  
-  @Input() level: Level;
-  @Output() jsonRequested: EventEmitter<string> = new EventEmitter<string>();
+  @Input() level: Level;  
   @Output() editRequested: EventEmitter<string> = new EventEmitter<string>();
-  
-  onView(id: string) {
-    this.jsonRequested.emit(id);
-  }
 
   onEdit(id: string) {
     this.editRequested.emit(id);

@@ -1,15 +1,22 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-
+import { MdDialog } from '@angular/material';
 import { Level, Spawn } from '../models/level';
+import { SpawnFormDialogComponent } from '../components/spawn-form.component';
 
 @Component({
   selector: 'glb-level-builder-form',  
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `    
+    <md-toolbar>
+      <span class="toolbar-title">{{level.name}} - {{level.id}}</span>
+      <span class="toolbar-center-spacer"></span>
+      <span class="toolbar-actions"><button md-button routerLink="/">Back to List</button></span>
+    </md-toolbar>
+
     <form #lvlfm="ngForm" (ngSubmit)="saveLevel(lvlfm.value)">
       <md-card>
-        <md-card-title>{{level.name}}</md-card-title>
-        <md-card-subtitle>{{level.id}}</md-card-subtitle>        
+        <md-card-title>Level Details</md-card-title>
+        <md-card-subtitle>Metadata properties for the level</md-card-subtitle>        
         <md-card-content>
           <md-input-container>
             <input mdInput id="name" name="name" [ngModel]="level.name" placeholder="Level Name" >
@@ -23,80 +30,12 @@ import { Level, Spawn } from '../models/level';
         </md-card-actions>
       </md-card>
     </form>
-
-    <form (ngSubmit)="doSubmit(fm.value)" #fm="ngForm">
-      
-      <fieldset>
-        <legend>Core Properties</legend>
-        <md-input-container>
-          <input mdInput id="time" name="time" type="text" 
-                  value="0" ngModel class="fw"
-                  placeholder="Spawn Time (Seconds)" required>
-        </md-input-container>      
-            
-        <md-select id="enemyType" class="fw" name="enemyType" ngModel placeholder="Enemy Type" required>
-          <md-option value="ASTEROID_FRAG" selected>Frag</md-option>
-          <md-option value="ASTEROID_A">Purple Asteroid (Large)</md-option>
-          <md-option value="ASTEROID_B">Blue Asteroid (Med)</md-option>
-          <md-option value="ASTEROID_C">Brown Asteroid (Small)</md-option>
-          <md-option value="COMET">Comet</md-option>
-        </md-select>
-        
-
-              
-        <md-select id="offsetQuad" class="fw" name="offsetType" ngModel placeholder="Offset Type" required>
-          <md-option value="QUAD_1" selected>QUAD 1 (Upper Right)</md-option>
-          <md-option value="QUAD_2">QUAD 2 (Upper Left)</md-option>
-          <md-option value="QUAD_3">QUAD 3 (Bottom Left)</md-option>
-          <md-option value="QUAD_4">QUAD 4 (Bottom Right)</md-option>
-          <md-option value="CENTER">Screen Center</md-option>
-        </md-select> 
-      </fieldset>     
-
-      <fieldset ngModelGroup="offsetPosition">
-        <legend>Starting Offset Position</legend>        
-        <md-input-container>          
-          <input mdInput id="offPosX" name="x" type="number" 
-                  value="0.0" ngModel class="fw"
-                  placeholder="Offset X" required>          
-        </md-input-container>        
-        <md-input-container>
-          <input mdInput id="offPosY" name="y" type="number" 
-                  value="0.0" ngModel class="fw"
-                  placeholder="Offset Y" required>
-        </md-input-container>
-      </fieldset>
-
-      <fieldset ngModelGroup="velocity">
-        <legend>Velocity</legend>        
-        <md-input-container>
-          <input mdInput id="velocityX" name="x" type="number"
-                  value="0.0" ngModel class="fw" 
-                  placeholder="Velocity X" required>
-        </md-input-container>        
-        <md-input-container> 
-          <input mdInput id="velocityY" name="y" type="number" 
-                  value="0.0" ngModel class="fw" 
-                  placeholder="Velocity Y" required>
-        </md-input-container>
-      </fieldset>
-      
-      <button md-raised-button class="fw" [disabled]="fm.pristine || !fm.valid" type="submit">Add Spawn</button>
-
-      
-    </form>
-    <div>
-    {{fm.valid}}
-    {{fm.value | json}}
-    {{level | json}}
-    </div>
-  `,
-  styles:[
-    `.fw{ 
-      margin: 0.5em 0;
-      width: 100%; 
-    }`
-  ]
+    <md-toolbar>
+      <span class="toolbar-title">Spawns ({{level.spawns.length}})</span>
+      <span class="toolbar-center-spacer"></span>
+      <span class="toolbar-actions"><button md-button (click)="presentSpawnDialog()">Add Spawn</button></span>
+    </md-toolbar>
+  `,  
 })
 export class LevelBuilderFormComponent{
   @Input() level: Level;
@@ -104,7 +43,7 @@ export class LevelBuilderFormComponent{
   @Output() spawnAdded:EventEmitter<Spawn> = new EventEmitter<Spawn>();
   @Output() levelSaved:EventEmitter<Level> = new EventEmitter<Level>();
 
-  constructor(){
+  constructor(private dialog: MdDialog){
   }
 
   saveLevel(level: Level){
@@ -114,6 +53,17 @@ export class LevelBuilderFormComponent{
   }
   doSubmit(spawnData: Spawn){    
     this.spawnAdded.emit(spawnData);
+  }
+
+  presentSpawnDialog(){
+    let dialogRef = this.dialog.open(SpawnFormDialogComponent);
+    dialogRef.afterClosed()
+      .subscribe((result) => {
+        console.log("Result", result);
+        if(result){
+          this.spawnAdded.emit(result);
+        }
+      });
   }
 
 }

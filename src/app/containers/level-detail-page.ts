@@ -12,7 +12,7 @@ import { Level } from '../models/level';
   template: `
     <md-card>
       <md-card-title>{{(level$ | async)?.name}}</md-card-title>
-      <a *ngIf="isJson" [routerLink]="'/'">Builder</a>
+      <a *ngIf="isJson" [routerLink]="'/builder'">Builder</a>
     </md-card>    
     <glb-level-detail [isJson]="isJson" [level]="level$ | async"></glb-level-detail>
   `
