@@ -99,17 +99,42 @@ export function reducer(state = initialState, action: level.Actions ): State {
 
       currentLevel = Object.assign({}, currentLevel, {
         spawns: newSpawns
-      });
+      }); 
 
       return {
         ids: [...state.ids],
         storedLevels: Object.assign({}, state.storedLevels, {
-          [currentLevel.id]:currentLevel
+          [currentLevel.id]: currentLevel
         }),
         currentLevelId: state.currentLevelId,
         loaded: state.loaded
       };
 
+    case level.ActionTypes.DELETE_SPAWN:
+      let targetSpawn: Spawn = action.payload,
+          spawns = [];
+
+      let curr = state.storedLevels[state.currentLevelId];
+      if(curr){
+        curr.spawns.forEach((s) => {
+          if(s !== action.payload){
+            spawns.push(Object.assign({}, s));
+          }
+        });
+      }
+
+      let updatedCurrent = Object.assign({}, curr, {
+        spawns: spawns
+      });
+
+      return {
+        ids: [...state.ids],
+        storedLevels: Object.assign({}, state.storedLevels, {
+          [updatedCurrent.id]: updatedCurrent
+        }),
+        currentLevelId: state.currentLevelId,
+        loaded: state.loaded
+      };
     default:
       return state;
   }

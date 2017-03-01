@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import * as fromRoot from '../reducers';
-import { AddSpawnAction, CreateLevelAction, SaveLevelAction } from '../actions/level';
+import { AddSpawnAction, DeleteSpawnAction, CreateLevelAction, SaveLevelAction } from '../actions/level';
 import { Level, Spawn } from '../models/level';
 
 
@@ -16,7 +16,7 @@ import { Level, Spawn } from '../models/level';
       [level]="level$ | async" 
       (spawnAdded)="addSpawn($event)"
       (levelSaved)="levelSaved($event)"></glb-level-builder-form>    
-    <glb-level-detail [level]="level$ | async"></glb-level-detail>
+    <glb-level-detail (spawnDeleted)="doDelete($event)" [level]="level$ | async"></glb-level-detail>
   `
 })
 export class LevelBuilderPageComponent {  
@@ -35,5 +35,10 @@ export class LevelBuilderPageComponent {
   levelSaved(level: Level){
     console.log("Emitted Level: ", level);
     this.store.dispatch(new SaveLevelAction(level))
+  }
+
+  doDelete(spawn: Spawn){
+    console.log("Delete Fired in Detail Page");
+    this.store.dispatch(new DeleteSpawnAction(spawn));
   }
 }

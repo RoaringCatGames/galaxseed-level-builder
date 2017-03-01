@@ -3,7 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import * as fromRoot from '../reducers';
-import { Level } from '../models/level';
+import { DeleteSpawnAction } from '../actions/level';
+import { Level, Spawn } from '../models/level';
 
 
 @Component({

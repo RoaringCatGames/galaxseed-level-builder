@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { Level } from '../models/level';
+import { Level, Spawn } from '../models/level';
 
 @Component({
   selector: 'glb-level-detail',
@@ -15,7 +15,9 @@ import { Level } from '../models/level';
         <md-grid-tile class="col">End Point</md-grid-tile>
         <md-grid-tile class="col">Speed</md-grid-tile> 
       </md-grid-list>      
-      <glb-spawn-detail *ngFor="let spawn of level?.spawns | sort:'time'" [spawn]="spawn"></glb-spawn-detail>      
+      <glb-spawn-detail *ngFor="let spawn of level?.spawns | sort:'time'" 
+        (deleteFired)="fireDelete($event)"
+        [spawn]="spawn"></glb-spawn-detail>      
     </div>
 
     <div *ngIf="isJson" class="flex-container">    
@@ -39,4 +41,11 @@ import { Level } from '../models/level';
 export class LevelDetailComponent {
   @Input() level: Level;
   @Input() isJson: boolean = false;
+
+  @Output() spawnDeleted: EventEmitter<Spawn> = new EventEmitter<Spawn>();
+
+  fireDelete(spawn: Spawn){
+    console.log("Delete Fired in Detail Component");
+    this.spawnDeleted.emit(spawn);
+  }
 }

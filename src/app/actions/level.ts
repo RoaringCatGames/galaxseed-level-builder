@@ -11,6 +11,7 @@ export const ActionTypes = {
   CREATE:  type('[Level] Create Level'),
   CREATE_SUCCESS: type('[Level] Create Level Success'),
   ADD_SPAWN:  type('[Level] Add Spawn'),
+  DELETE_SPAWN: type('[Level] Delete Spawn'),
   UPDATE_LEVEL: type('[Level] Update Level'),
   SAVE_LEVEL: type('[Level] Save Level')
 };
@@ -46,6 +47,11 @@ export class AddSpawnAction implements Action {
   constructor(public payload: Spawn) {}
 }
 
+export class DeleteSpawnAction implements Action {
+  type = ActionTypes.DELETE_SPAWN;
+  constructor(public payload: Spawn) {}
+}
+
 export class UpdateLevelAction implements Action {
   type = ActionTypes.UPDATE_LEVEL;
   constructor(public payload: Level) {}
@@ -65,5 +71,6 @@ export type Actions
   | CreateLevelAction
   | CreateLevelSuccessAction
   | AddSpawnAction
+  | DeleteSpawnAction
   | UpdateLevelAction
   | SaveLevelAction;
