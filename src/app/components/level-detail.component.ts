@@ -6,7 +6,16 @@ import { Level } from '../models/level';
   selector: 'glb-level-detail',
   template: `        
     <div *ngIf="!isJson">
-      <glb-spawn-detail *ngFor="let spawn of level?.spawns | sort:'time'" [spawn]="spawn"></glb-spawn-detail>
+      <md-grid-list cols="7" rowHeight="20px">         
+        <md-grid-tile class="col">Spawn Time</md-grid-tile >
+        <md-grid-tile class="col">Enemy Type</md-grid-tile>
+        <md-grid-tile class="col">Power Up?</md-grid-tile>
+        <md-grid-tile class="col">Start Position</md-grid-tile>
+        <md-grid-tile class="col">Mid Bezier Point</md-grid-tile>
+        <md-grid-tile class="col">End Point</md-grid-tile>
+        <md-grid-tile class="col">Speed</md-grid-tile> 
+      </md-grid-list>      
+      <glb-spawn-detail *ngFor="let spawn of level?.spawns | sort:'time'" [spawn]="spawn"></glb-spawn-detail>      
     </div>
 
     <div *ngIf="isJson" class="flex-container">    

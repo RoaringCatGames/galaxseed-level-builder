@@ -76,5 +76,8 @@ export function reducer(state: any, action: any) {
 
 export const getLevelState = (state: State) => state.level;
 
+export const getCurrentLevelId = createSelector(getLevelState, fromLevels.getCurrentId);
 export const getCurrentLevel = createSelector(getLevelState, fromLevels.getCurrent);
 export const getLevels = createSelector(getLevelState, fromLevels.getAll);
+export const getLevelsMap = createSelector(getLevelState, (s) => s.storedLevels);
+export const getLevelsLoaded = createSelector(getLevelState, (s) => s.loaded);

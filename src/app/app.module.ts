@@ -15,6 +15,7 @@ import { ComponentsModule } from './components';
 import { LevelEffects } from './effects/level.effects';
 
 import { AppComponent } from './containers/app';
+import { LevelExistsGuard } from './guards/level-exists.guard';
 import { LevelListPageComponent } from './containers/level-list-page';
 import { LevelBuilderPageComponent } from './containers/level-builder-page';
 import { LevelJsonPageComponent } from './containers/level-json-page';
@@ -86,7 +87,8 @@ import { schema } from './db';
     LevelDetailPageComponent,         
     NotFoundPageComponent
   ],
-  providers: [    
+  providers: [  
+    LevelExistsGuard  
   ],
   bootstrap: [
     AppComponent

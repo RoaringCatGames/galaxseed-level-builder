@@ -7,12 +7,14 @@ export interface State {
   ids: string[];
   storedLevels: { [id: string]: Level };
   currentLevelId: string | null;
+  loaded: boolean;
 }
 
 export const initialState: State = {
   ids: [],
   storedLevels: {},
-  currentLevelId: undefined
+  currentLevelId: undefined,
+  loaded: false
 };
 
 export function reducer(state = initialState, action: level.Actions ): State {
@@ -25,7 +27,8 @@ export function reducer(state = initialState, action: level.Actions ): State {
       return {
         ids: [...loadedLevels.map((l: Level) => l.id)],
         storedLevels: levelsMap,
-        currentLevelId: undefined
+        currentLevelId: undefined,
+        loaded: true
       };
 
 
@@ -39,7 +42,8 @@ export function reducer(state = initialState, action: level.Actions ): State {
         storedLevels: Object.assign({}, state.storedLevels, {
           [newLevel.id]:newLevel
         }),
-        currentLevelId: newLevel.id
+        currentLevelId: newLevel.id,
+        loaded: state.loaded
       };      
 
     case level.ActionTypes.SELECT_LEVEL:
@@ -47,7 +51,8 @@ export function reducer(state = initialState, action: level.Actions ): State {
       return {
         ids:[...state.ids],
         storedLevels: Object.assign({}, state.storedLevels),
-        currentLevelId: action.payload
+        currentLevelId: action.payload,
+        loaded: state.loaded
       };    
 
     case level.ActionTypes.SAVE_LEVEL:      
@@ -58,7 +63,8 @@ export function reducer(state = initialState, action: level.Actions ): State {
         storedLevels: Object.assign({}, state.storedLevels, {
           [newLevelToSave.id]: newLevelToSave
         }),
-        currentLevelId: state.currentLevelId
+        currentLevelId: state.currentLevelId,
+        loaded: state.loaded
       };
 
     case level.ActionTypes.UPDATE_LEVEL:      
@@ -69,7 +75,8 @@ export function reducer(state = initialState, action: level.Actions ): State {
         storedLevels: Object.assign({}, state.storedLevels, {
           [updatedLevel.id]: updatedLevel
         }),
-        currentLevelId: state.currentLevelId
+        currentLevelId: state.currentLevelId,
+        loaded: state.loaded
       };
       
     case level.ActionTypes.ADD_SPAWN:
@@ -77,7 +84,12 @@ export function reducer(state = initialState, action: level.Actions ): State {
       let newSpawn: Spawn = action.payload,
           newSpawns: Array<Spawn> ,
           currentLevel: Level = state.storedLevels[state.currentLevelId];
-          
+      if(newSpawn.enemyType != 'COMET'){
+        newSpawn = Object.assign({}, newSpawn, {
+          midBezierPoint: undefined,
+          endPoint: undefined
+        });        
+      }  
       if(currentLevel !== undefined && currentLevel !== null){
         newSpawns = [...currentLevel.spawns]
       }else{
@@ -94,7 +106,8 @@ export function reducer(state = initialState, action: level.Actions ): State {
         storedLevels: Object.assign({}, state.storedLevels, {
           [currentLevel.id]:currentLevel
         }),
-        currentLevelId: state.currentLevelId
+        currentLevelId: state.currentLevelId,
+        loaded: state.loaded
       };
 
     default:

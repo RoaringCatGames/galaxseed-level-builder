@@ -19,10 +19,10 @@ import { SpawnFormDialogComponent } from '../components/spawn-form.component';
         <md-card-subtitle>Metadata properties for the level</md-card-subtitle>        
         <md-card-content>
           <md-input-container>
-            <input mdInput id="name" name="name" [ngModel]="level.name" placeholder="Level Name" >
+            <input mdInput name="name" [ngModel]="level.name" [value]="level.name" placeholder="Level Name" >
           </md-input-container>
           <md-input-container>
-            <input mdInput id="length" name="length" [ngModel]="level.length" placeholder="Length (Seconds)" >
+            <input mdInput name="length" [ngModel]="level.length" [value]="level.length" placeholder="Length (Seconds)" >
           </md-input-container>    
         </md-card-content>
         <md-card-actions>
